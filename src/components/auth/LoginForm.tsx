@@ -11,6 +11,8 @@ import { toast } from 'sonner'
 import { loginSchema, LoginFormData } from '@/schemas/auth.schema'
 import { loginUser } from '@/lib/auth'
 
+import { saveAuthData } from '@/lib/storage'
+
 import {
   Card,
   CardContent,
@@ -37,6 +39,8 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       const result = await loginUser(data)
+
+      saveAuthData(result.accessToken, result.user)
 
       console.log(result)
 
