@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 import { getMyRentalRequests } from '@/services/rental.service'
+import { createPayment } from '@/services/payment.service'
+
 import StatusBadge from '@/components/rental/StatusBadge'
 import { Button } from '@/components/ui/button'
 
@@ -27,6 +30,7 @@ interface RentalRequest {
 export default function TenantRequestsPage() {
   const [requests, setRequests] = useState<RentalRequest[]>([])
   const [loading, setLoading] = useState(true)
+  const [payingId, setPayingId] = useState<string | null>(null)
 
   useEffect(() => {
     loadRequests()
@@ -35,12 +39,28 @@ export default function TenantRequestsPage() {
   const loadRequests = async () => {
     try {
       const response = await getMyRentalRequests()
-
       setRequests(response.rentalRequests)
     } catch (error) {
       console.error(error)
+      toast.error('Failed to load rental requests')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handlePayment = async (rentalRequestId: string) => {
+    try {
+      setPayingId(rentalRequestId)
+
+      const data = await createPayment(rentalRequestId)
+
+      window.location.href = data.checkoutUrl
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to create payment',
+      )
+    } finally {
+      setPayingId(null)
     }
   }
 
@@ -50,14 +70,12 @@ export default function TenantRequestsPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">My Rental Requests</h1>
+      <div>
+        <h1 className="text-3xl font-bold">My Rental Requests</h1>
 
-          <p className="text-muted-foreground mt-2">
-            View the status of all your rental requests.
-          </p>
-        </div>
+        <p className="mt-2 text-muted-foreground">
+          View the status of all your rental requests.
+        </p>
       </div>
 
       {requests.length === 0 ? (
@@ -125,7 +143,38 @@ export default function TenantRequestsPage() {
                 <div className="flex flex-col items-end gap-4">
                   <StatusBadge status={request.status} />
 
-                  {request.status === 'APPROVED' && <Button>Pay Now</Button>}
+                  {request.status === 'PENDING' && (
+                    <Button disabled variant="secondary">
+                      Waiting for Approval
+                    </Button>
+                  )}
+
+                  {request.status === 'APPROVED' && (
+                    <Button
+                      onClick={() => handlePayment(request.id)}
+                      disabled={payingId === request.id}
+                    >
+                      {payingId === request.id ? 'Redirecting...' : 'Pay Now'}
+                    </Button>
+                  )}
+
+                  {request.status === 'ACTIVE' && (
+                    <Button disabled variant="default">
+                      Rental Active
+                    </Button>
+                  )}
+
+                  {request.status === 'COMPLETED' && (
+                    <Button disabled variant="outline">
+                      Rental Completed
+                    </Button>
+                  )}
+
+                  {request.status === 'REJECTED' && (
+                    <Button disabled variant="destructive">
+                      Request Rejected
+                    </Button>
+                  )}
 
                   <Button variant="outline" asChild>
                     <Link href={`/properties/${request.property.id}`}>

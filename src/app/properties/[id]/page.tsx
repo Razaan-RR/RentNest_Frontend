@@ -57,7 +57,19 @@ export default async function PropertyDetailsPage({
             <strong>Amenities:</strong> {property.amenities}
           </div>
 
-          <RentalRequestForm propertyId={property.id} />
+          {property.availability === 'AVAILABLE' ? (
+            <RentalRequestForm propertyId={property.id} />
+          ) : (
+            <div className="mt-6 rounded-lg border border-green-300 bg-green-50 p-4">
+              <h3 className="font-semibold text-green-700">
+                This property has already been rented.
+              </h3>
+
+              <p className="mt-1 text-sm text-green-600">
+                Rental requests are no longer available for this property.
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
