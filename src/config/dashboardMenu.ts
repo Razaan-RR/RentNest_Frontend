@@ -1,60 +1,82 @@
 export const dashboardMenu = {
   TENANT: [
     {
-      title: "Dashboard",
-      href: "/dashboard/tenant",
+      title: 'Dashboard',
+      href: '/dashboard/tenant',
     },
     {
-      title: "My Requests",
-      href: "/dashboard/tenant/requests",
+      title: 'Browse Properties',
+      href: '/properties',
     },
     {
-      title: "Payments",
-      href: "/dashboard/tenant/payments",
+      title: 'My Requests',
+      href: '/dashboard/tenant/requests',
     },
     {
-      title: "Reviews",
-      href: "/dashboard/tenant/reviews",
+      title: 'Payments',
+      href: '/dashboard/tenant/payments',
+    },
+    {
+      title: 'Reviews',
+      href: '/dashboard/tenant/reviews',
+    },
+    {
+      title: 'Profile',
+      href: '/dashboard/tenant/profile',
     },
   ],
-
 
   LANDLORD: [
     {
-      title: "Dashboard",
-      href: "/dashboard/landlord",
+      title: 'Dashboard',
+      href: '/dashboard/landlord',
     },
     {
-      title: "My Properties",
-      href: "/dashboard/landlord/properties",
+      title: 'My Properties',
+      href: '/dashboard/landlord/properties',
     },
     {
-      title: "Rental Requests",
-      href: "/dashboard/landlord/requests",
+      title: 'Add Property',
+      href: '/dashboard/landlord/properties/create',
     },
     {
-      title: "Earnings",
-      href: "/dashboard/landlord/earnings",
+      title: 'Rental Requests',
+      href: '/dashboard/landlord/requests',
+    },
+    {
+      title: 'Earnings',
+      href: '/dashboard/landlord/earnings',
+    },
+    {
+      title: 'Profile',
+      href: '/dashboard/landlord/profile',
     },
   ],
-
 
   ADMIN: [
     {
-      title: "Dashboard",
-      href: "/dashboard/admin",
+      title: 'Dashboard',
+      href: '/dashboard/admin',
     },
     {
-      title: "Users",
-      href: "/dashboard/admin/users",
+      title: 'Users',
+      href: '/dashboard/admin/users',
     },
     {
-      title: "Properties",
-      href: "/dashboard/admin/properties",
+      title: 'Properties',
+      href: '/dashboard/admin/properties',
     },
     {
-      title: "Rental Requests",
-      href: "/dashboard/admin/rentals",
+      title: 'Rental Requests',
+      href: '/dashboard/admin/rentals',
+    },
+    {
+      title: 'Categories',
+      href: '/dashboard/admin/categories',
+    },
+    {
+      title: 'Profile',
+      href: '/dashboard/admin/profile',
     },
   ],
-};
+}

@@ -1,3 +1,4 @@
+import RentalRequestForm from '@/components/property/RentalRequestForm'
 import { getPropertyById } from '@/services/property.service'
 
 export default async function PropertyDetailsPage({
@@ -56,18 +57,7 @@ export default async function PropertyDetailsPage({
             <strong>Amenities:</strong> {property.amenities}
           </div>
 
-          <button
-            className="
-              mt-5
-              rounded-lg
-              bg-primary
-              text-primary-foreground
-              px-6
-              py-3
-            "
-          >
-            Request to Rent
-          </button>
+          <RentalRequestForm propertyId={property.id} />
         </div>
       </div>
 
