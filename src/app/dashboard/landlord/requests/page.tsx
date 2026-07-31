@@ -30,7 +30,10 @@ export default function LandlordRequestsPage() {
     fetchRequests()
   }, [])
 
-  const updateStatus = async (id: string, status: 'APPROVED' | 'REJECTED') => {
+  const updateStatus = async (
+    id: string,
+    status: 'APPROVED' | 'REJECTED' | 'COMPLETED',
+  ) => {
     try {
       await updateRentalRequestStatus(id, status)
 
@@ -96,6 +99,14 @@ export default function LandlordRequestsPage() {
                     Reject
                   </button>
                 </div>
+              )}
+              {request.status === 'ACTIVE' && (
+                <button
+                  onClick={() => updateStatus(request.id, 'COMPLETED')}
+                  className="px-4 py-2 rounded bg-blue-600 text-white"
+                >
+                  Complete Rental
+                </button>
               )}
             </div>
           ))}

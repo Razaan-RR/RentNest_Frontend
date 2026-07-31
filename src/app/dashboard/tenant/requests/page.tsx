@@ -9,6 +9,7 @@ import { createPayment } from '@/services/payment.service'
 
 import StatusBadge from '@/components/rental/StatusBadge'
 import { Button } from '@/components/ui/button'
+import ReviewDialog from '@/components/review/ReviewDialog'
 
 interface RentalRequest {
   id: string
@@ -156,6 +157,13 @@ export default function TenantRequestsPage() {
                     >
                       {payingId === request.id ? 'Redirecting...' : 'Pay Now'}
                     </Button>
+                  )}
+
+                  {request.status === 'COMPLETED' && (
+                    <ReviewDialog
+                      rentalRequestId={request.id}
+                      onSuccess={loadRequests}
+                    />
                   )}
 
                   {request.status === 'ACTIVE' && (

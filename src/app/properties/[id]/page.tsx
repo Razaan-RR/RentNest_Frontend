@@ -1,4 +1,5 @@
 import RentalRequestForm from '@/components/property/RentalRequestForm'
+import PropertyReviews from '@/components/review/PropertyReviews'
 import { getPropertyById } from '@/services/property.service'
 
 export default async function PropertyDetailsPage({
@@ -80,6 +81,8 @@ export default async function PropertyDetailsPage({
 
         <p>{property.landlord.email}</p>
       </section>
+
+      <PropertyReviews propertyId={property.id} />
     </main>
   )
 }
