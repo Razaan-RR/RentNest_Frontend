@@ -36,8 +36,6 @@ export default function MyPropertiesPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this property?')) return
-
     try {
       await deleteProperty(id)
 
@@ -45,7 +43,7 @@ export default function MyPropertiesPage() {
 
       loadProperties()
     } catch (error: any) {
-      toast.error(error.message)
+      toast.error(error.message || 'Delete failed')
     }
   }
 

@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button'
 
 import { getPropertyById, updateProperty } from '@/services/property.service'
 
+import MultiImageUpload from '@/components/shared/MultiImageUpload'
+
 interface Props {
   id: string
 }
@@ -19,7 +21,7 @@ export default function EditPropertyForm({ id }: Props) {
 
   const [loading, setLoading] = useState(true)
 
-  const [form, setForm] = useState<any>({
+  const [form, setForm] = useState({
     title: '',
     location: '',
     address: '',
@@ -30,6 +32,7 @@ export default function EditPropertyForm({ id }: Props) {
     area: '',
     propertyType: '',
     amenities: '',
+    images: [] as string[],
   })
 
   useEffect(() => {
@@ -47,26 +50,28 @@ export default function EditPropertyForm({ id }: Props) {
         location: property.location,
         address: property.address,
         description: property.description,
-        rentAmount: property.rentAmount,
-        bedrooms: property.bedrooms,
-        bathrooms: property.bathrooms,
-        area: property.area,
+        rentAmount: String(property.rentAmount),
+        bedrooms: String(property.bedrooms),
+        bathrooms: String(property.bathrooms),
+        area: property.area ? String(property.area) : '',
         propertyType: property.propertyType,
-        amenities: property.amenities,
+        amenities: property.amenities || '',
+        images: property.images || [],
       })
-    } catch (error) {
+    } catch {
       toast.error('Failed to load property')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleChange = (e: any) => {
-    setForm({
-      ...form,
-
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setForm((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    })
+    }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -77,9 +82,12 @@ export default function EditPropertyForm({ id }: Props) {
         ...form,
 
         rentAmount: Number(form.rentAmount),
+
         bedrooms: Number(form.bedrooms),
+
         bathrooms: Number(form.bathrooms),
-        area: Number(form.area),
+
+        area: form.area ? Number(form.area) : undefined,
       })
 
       toast.success('Property updated successfully')
@@ -96,6 +104,16 @@ export default function EditPropertyForm({ id }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5 border rounded-xl p-6">
+      <MultiImageUpload
+        value={form.images}
+        onChange={(images) =>
+          setForm((prev) => ({
+            ...prev,
+            images,
+          }))
+        }
+      />
+
       <Input
         name="title"
         value={form.title}
@@ -138,6 +156,7 @@ export default function EditPropertyForm({ id }: Props) {
           type="number"
           value={form.bedrooms}
           onChange={handleChange}
+          placeholder="Bedrooms"
         />
 
         <Input
@@ -145,6 +164,7 @@ export default function EditPropertyForm({ id }: Props) {
           type="number"
           value={form.bathrooms}
           onChange={handleChange}
+          placeholder="Bathrooms"
         />
 
         <Input
@@ -152,6 +172,7 @@ export default function EditPropertyForm({ id }: Props) {
           type="number"
           value={form.area}
           onChange={handleChange}
+          placeholder="Area"
         />
       </div>
 
@@ -169,7 +190,9 @@ export default function EditPropertyForm({ id }: Props) {
         placeholder="Amenities"
       />
 
-      <Button className="w-full">Update Property</Button>
+      <Button className="w-full" type="submit">
+        Update Property
+      </Button>
     </form>
   )
 }

@@ -32,6 +32,10 @@ export const dashboardMenu = {
       href: '/dashboard/landlord',
     },
     {
+      title: 'Browse Properties',
+      href: '/properties',
+    },
+    {
       title: 'My Properties',
       href: '/dashboard/landlord/properties',
     },

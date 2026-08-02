@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface Property {
   id: string
@@ -12,14 +13,25 @@ interface Property {
   propertyType: string
   amenities: string
   availability: string
+  images: string[]
 }
 
 export default function PropertyCard({ property }: { property: Property }) {
   return (
     <div className="rounded-xl border bg-card p-5 shadow-sm hover:shadow-md transition">
-      {/* Image Placeholder */}
-      <div className="h-48 rounded-lg bg-muted flex items-center justify-center">
-        <span className="text-muted-foreground">Property Image</span>
+      <div className="relative h-48 w-full overflow-hidden rounded-lg">
+        {property.images?.length > 0 ? (
+          <Image
+            src={property.images[0]}
+            alt={property.title}
+            fill
+            className="object-cover"
+          />
+        ) : (
+          <div className="h-full flex items-center justify-center bg-muted">
+            <span className="text-muted-foreground">No Image</span>
+          </div>
+        )}
       </div>
 
       <div className="mt-4 space-y-3">

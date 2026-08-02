@@ -1,5 +1,15 @@
 'use client'
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -159,18 +169,35 @@ export default function AdminCategoriesPage() {
               </p>
             </div>
 
-            <button
-              onClick={() => handleDelete(category.id)}
-              className="
-                                bg-red-600
-                                text-white
-                                px-4
-                                py-2
-                                rounded-lg
-                                "
-            >
-              Delete
-            </button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button className="text-red-500 hover:text-red-700">
+                  Delete
+                </button>
+              </AlertDialogTrigger>
+
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    this category.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                  <AlertDialogAction
+                    onClick={() => handleDelete(category.id)}
+                    className="bg-red-600 hover:bg-red-700"
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         ))}
       </div>

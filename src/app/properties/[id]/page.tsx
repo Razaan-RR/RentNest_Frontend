@@ -1,5 +1,6 @@
 import RentalRequestForm from '@/components/property/RentalRequestForm'
 import PropertyReviews from '@/components/review/PropertyReviews'
+import PropertyImageSlider from '@/components/property/PropertyImageSlider'
 import { getPropertyById } from '@/services/property.service'
 
 export default async function PropertyDetailsPage({
@@ -20,21 +21,8 @@ export default async function PropertyDetailsPage({
       <p className="mt-2 text-muted-foreground">{property.location}</p>
 
       <div className="mt-8 grid md:grid-cols-2 gap-8">
-        {/* Image Section */}
-        <div
-          className="
-          h-80
-          rounded-xl
-          bg-muted
-          flex
-          items-center
-          justify-center
-        "
-        >
-          Property Image
-        </div>
+        <PropertyImageSlider images={property.images || []} />
 
-        {/* Details */}
         <div className="space-y-4">
           <h2 className="text-2xl font-semibold">
             ৳ {property.rentAmount}/month

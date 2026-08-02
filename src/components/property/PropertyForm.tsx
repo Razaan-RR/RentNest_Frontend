@@ -11,9 +11,26 @@ import { Textarea } from '@/components/ui/textarea'
 import { createProperty } from '@/services/property.service'
 import { getCategories } from '@/services/category.service'
 
+import MultiImageUpload from '../shared/MultiImageUpload'
+
 interface Category {
   id: string
   name: string
+}
+
+interface PropertyFormState {
+  title: string
+  location: string
+  address: string
+  description: string
+  rentAmount: string
+  bedrooms: string
+  bathrooms: string
+  area: string
+  propertyType: string
+  amenities: string
+  categoryId: string
+  images: string[]
 }
 
 export default function PropertyForm() {
@@ -21,7 +38,9 @@ export default function PropertyForm() {
 
   const [categories, setCategories] = useState<Category[]>([])
 
-  const [form, setForm] = useState({
+  const [loading, setLoading] = useState(false)
+
+  const [form, setForm] = useState<PropertyFormState>({
     title: '',
     location: '',
     address: '',
@@ -33,6 +52,7 @@ export default function PropertyForm() {
     propertyType: '',
     amenities: '',
     categoryId: '',
+    images: [],
   })
 
   useEffect(() => {
@@ -44,8 +64,8 @@ export default function PropertyForm() {
       const response = await getCategories()
 
       setCategories(response.categories)
-    } catch (error) {
-      console.log(error)
+    } catch {
+      toast.error('Failed to load categories')
     }
   }
 
@@ -54,24 +74,33 @@ export default function PropertyForm() {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
   ) => {
-    setForm({
-      ...form,
-
+    setForm((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    })
+    }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    if (form.images.length === 0) {
+      toast.error('Please upload at least one property image')
+      return
+    }
+
     try {
+      setLoading(true)
+
       await createProperty({
         ...form,
 
         rentAmount: Number(form.rentAmount),
+
         bedrooms: Number(form.bedrooms),
+
         bathrooms: Number(form.bathrooms),
-        area: Number(form.area),
+
+        area: form.area ? Number(form.area) : undefined,
       })
 
       toast.success('Property created successfully')
@@ -81,11 +110,23 @@ export default function PropertyForm() {
       toast.error(
         error instanceof Error ? error.message : 'Failed to create property',
       )
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5 border rounded-xl p-6">
+      <MultiImageUpload
+        value={form.images}
+        onChange={(images) => {
+          setForm((prev) => ({
+            ...prev,
+            images,
+          }))
+        }}
+      />
+
       <Input
         name="title"
         placeholder="Property title"
@@ -157,7 +198,7 @@ export default function PropertyForm() {
 
       <Input
         name="amenities"
-        placeholder="Amenities"
+        placeholder="Amenities (comma separated)"
         value={form.amenities}
         onChange={handleChange}
       />
@@ -177,8 +218,8 @@ export default function PropertyForm() {
         ))}
       </select>
 
-      <Button type="submit" className="w-full">
-        Create Property
+      <Button type="submit" className="w-full" disabled={loading}>
+        {loading ? 'Creating...' : 'Create Property'}
       </Button>
     </form>
   )
