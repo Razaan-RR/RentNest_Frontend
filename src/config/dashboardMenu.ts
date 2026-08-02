@@ -44,10 +44,6 @@ export const dashboardMenu = {
       href: '/dashboard/landlord/requests',
     },
     {
-      title: 'Earnings',
-      href: '/dashboard/landlord/earnings',
-    },
-    {
       title: 'Profile',
       href: '/dashboard/landlord/profile',
     },
