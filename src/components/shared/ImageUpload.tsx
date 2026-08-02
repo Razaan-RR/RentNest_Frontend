@@ -55,13 +55,13 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
 
   return (
     <div className="space-y-4">
-      {value ? (
+      {value && value.includes('cloudinary.com') ? (
         <Image
           src={value}
           alt="Profile"
           width={150}
           height={150}
-          className="w-36 h-36 rounded-full object-cover border-2 border-gray-300"
+          className="rounded-full object-cover w-[150px] h-[150px]"
         />
       ) : (
         <div className="w-[140px] h-[140px] rounded-full border flex items-center justify-center text-sm text-muted-foreground">

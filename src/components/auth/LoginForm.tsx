@@ -24,9 +24,12 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useAuth } from '@/providers/AuthProvider'
 
 export default function LoginForm() {
   const router = useRouter()
+
+  const { setUser } = useAuth()
 
   const {
     register,
@@ -42,12 +45,9 @@ export default function LoginForm() {
 
       saveAuthData(result.accessToken, result.user)
 
-      console.log(result)
+      setUser(result.user)
 
       toast.success('Login successful!')
-
-      // We will save the token later
-      // localStorage.setItem("accessToken", result.accessToken);
 
       // Redirect based on role
       switch (result.user.role) {

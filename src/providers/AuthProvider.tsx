@@ -1,50 +1,22 @@
-"use client";
+'use client'
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
-import {
-  getUser,
-  removeAuthData,
-} from "@/lib/storage";
+import { getUser, removeAuthData } from '@/lib/storage'
 
+const AuthContext = createContext<any>(null)
 
-const AuthContext = createContext<any>(null);
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState(() => getUser())
 
-
-
-export function AuthProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-
-
-  const [user, setUser] = useState(null);
-
-
-  useEffect(() => {
-
-    const storedUser = getUser();
-
-    setUser(storedUser);
-
-  }, []);
-
-
+  const router = useRouter()
 
   const logout = () => {
-
-    removeAuthData();
-
-    setUser(null);
-
-  };
-
+    removeAuthData()
+    setUser(null)
+    router.replace('/login')
+  }
 
   return (
     <AuthContext.Provider
@@ -56,13 +28,9 @@ export function AuthProvider({
     >
       {children}
     </AuthContext.Provider>
-  );
+  )
 }
 
-
-
-export function useAuth(){
-
-  return useContext(AuthContext);
-
+export function useAuth() {
+  return useContext(AuthContext)
 }
