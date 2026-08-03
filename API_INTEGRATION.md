@@ -25,12 +25,6 @@ All API requests are handled through:
 src/lib/api.ts
 ```
 
-Environment variable:
-
-```
-NEXT_PUBLIC_API_URL=<backend-url>
-```
-
 Example:
 
 ```
