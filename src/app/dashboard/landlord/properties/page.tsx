@@ -15,25 +15,44 @@ import { Button } from '@/components/ui/button'
 
 import { toast } from 'sonner'
 
-export default function MyPropertiesPage() {
-  const [properties, setProperties] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
+interface Property {
+  id: string
+  title: string
+  location: string
+  rentAmount: string
+  bedrooms: number
+  bathrooms: number
+  area: number
+  propertyType: string
+  amenities: string
+  availability: string
+}
 
-  useEffect(() => {
-    loadProperties()
-  }, [])
+export default function MyPropertiesPage() {
+  const [properties, setProperties] = useState<Property[]>([])
+  const [loading, setLoading] = useState(true)
 
   const loadProperties = async () => {
     try {
-      const response = await getMyProperties()
+      const response = (await getMyProperties()) as {
+        properties: Property[]
+      }
 
-      setProperties(response.properties)
+      setProperties(response.properties || [])
     } catch {
       toast.error('Failed to load properties')
     } finally {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      await loadProperties()
+    }
+
+    fetchProperties()
+  }, [])
 
   const handleDelete = async (id: string) => {
     try {
@@ -42,8 +61,8 @@ export default function MyPropertiesPage() {
       toast.success('Property deleted')
 
       loadProperties()
-    } catch (error: any) {
-      toast.error(error.message || 'Delete failed')
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Delete failed')
     }
   }
 

@@ -1,12 +1,31 @@
 'use client'
-
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 import { getMyRentalRequests } from '@/services/rentalRequest.service'
 
+
+interface RentalRequest {
+  id: string
+  status: string
+  duration: number
+  moveInDate: string
+
+  property: {
+    title: string
+    location: string
+    rentAmount: string
+
+    landlord: {
+      name: string
+      email: string
+    }
+  }
+}
+
+
 export default function TenantRentalsPage() {
-  const [rentals, setRentals] = useState<any[]>([])
+  const [rentals, setRentals] = useState<RentalRequest[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -15,7 +34,7 @@ export default function TenantRentalsPage() {
         const data = await getMyRentalRequests()
 
         const activeRentals = (data.rentalRequests || []).filter(
-          (item: any) => item.status === 'ACTIVE',
+          (item) => item.status === 'ACTIVE',
         )
 
         setRentals(activeRentals)

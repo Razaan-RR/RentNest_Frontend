@@ -6,17 +6,35 @@ import { toast } from 'sonner'
 import { getMyRentalRequests } from '@/services/rentalRequest.service'
 import { getMyPayments } from '@/services/payment.service'
 
+interface RentalRequest {
+  id: string
+  status: string
+  property: {
+    title: string
+    location: string
+  }
+}
+
+interface Payment {
+  id: string
+  amount: string
+  status: string
+}
+
 export default function TenantDashboardPage() {
-  const [requests, setRequests] = useState<any[]>([])
-  const [payments, setPayments] = useState<any[]>([])
+  const [requests, setRequests] = useState<RentalRequest[]>([])
+  const [payments, setPayments] = useState<Payment[]>([])
 
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const requestData = await getMyRentalRequests()
-        const paymentData = await getMyPayments()
+        const requestData = (await getMyRentalRequests()) as {
+          rentalRequests: RentalRequest[]
+        }
+
+        const paymentData = (await getMyPayments()) as Payment[]
 
         setRequests(requestData.rentalRequests || [])
 

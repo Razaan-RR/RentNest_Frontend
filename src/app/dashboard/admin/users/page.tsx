@@ -16,7 +16,6 @@ interface User {
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([])
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([])
 
   const [search, setSearch] = useState('')
 
@@ -24,10 +23,11 @@ export default function AdminUsersPage() {
 
   const loadUsers = async () => {
     try {
-      const response = await getAdminUsers()
+      const response = (await getAdminUsers()) as {
+        users: User[]
+      }
 
       setUsers(response.users || [])
-      setFilteredUsers(response.users || [])
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : 'Failed to load users',
@@ -38,18 +38,18 @@ export default function AdminUsersPage() {
   }
 
   useEffect(() => {
-    loadUsers()
+    const fetchUsers = async () => {
+      await loadUsers()
+    }
+
+    fetchUsers()
   }, [])
 
-  useEffect(() => {
-    const result = users.filter(
-      (user) =>
-        user.name.toLowerCase().includes(search.toLowerCase()) ||
-        user.email.toLowerCase().includes(search.toLowerCase()),
-    )
-
-    setFilteredUsers(result)
-  }, [search, users])
+  const filteredUsers = users.filter(
+  (user) =>
+    user.name.toLowerCase().includes(search.toLowerCase()) ||
+    user.email.toLowerCase().includes(search.toLowerCase()),
+)
 
   const toggleStatus = async (user: User) => {
     try {

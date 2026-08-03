@@ -6,15 +6,32 @@ import PropertyCard from '@/components/property/PropertyCard'
 import PropertyFilter from '@/components/property/PropertyFilter'
 import PropertyCardSkeleton from '@/components/property/PropertyCardSkeleton'
 
+interface Property {
+  id: string
+  title: string
+  description: string
+  location: string
+  rentAmount: string
+  bedrooms: number
+  bathrooms: number
+  area: number
+  propertyType: string
+  amenities: string
+  availability: string
+  images: string[]
+}
+
 export default function PropertiesPage() {
-  const [properties, setProperties] = useState<any[]>([])
+  const [properties, setProperties] = useState<Property[]>([])
   const [loading, setLoading] = useState(true)
 
   const loadProperties = async (filters?: Record<string, string>) => {
     try {
       setLoading(true)
 
-      const response = await getProperties(filters)
+      const response = (await getProperties(filters)) as {
+        properties: Property[]
+      }
 
       setProperties(response.properties)
     } finally {

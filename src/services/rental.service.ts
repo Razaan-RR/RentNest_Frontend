@@ -25,3 +25,4 @@ export const getRentalRequest = async (id: string) => {
     method: 'GET',
   })
 }
+

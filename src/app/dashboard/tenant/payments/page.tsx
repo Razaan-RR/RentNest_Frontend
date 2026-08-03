@@ -33,13 +33,9 @@ export default function TenantPaymentsPage() {
   const [payments, setPayments] = useState<Payment[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    loadPayments()
-  }, [])
-
   const loadPayments = async () => {
     try {
-      const response = await getMyPayments()
+      const response = (await getMyPayments()) as Payment[]
 
       setPayments(response)
     } catch (error) {
@@ -48,6 +44,14 @@ export default function TenantPaymentsPage() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    const load = async () => {
+      await loadPayments()
+    }
+
+    load()
+  }, [])
 
   if (loading) {
     return <div className="py-10 text-center">Loading payments...</div>

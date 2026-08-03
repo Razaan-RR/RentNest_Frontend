@@ -33,14 +33,13 @@ export default function TenantRequestsPage() {
   const [loading, setLoading] = useState(true)
   const [payingId, setPayingId] = useState<string | null>(null)
 
-  useEffect(() => {
-    loadRequests()
-  }, [])
-
   const loadRequests = async () => {
     try {
-      const response = await getMyRentalRequests()
-      setRequests(response.rentalRequests)
+      const response = (await getMyRentalRequests()) as {
+        rentalRequests: RentalRequest[]
+      }
+
+      setRequests(response.rentalRequests || [])
     } catch (error) {
       console.error(error)
       toast.error('Failed to load rental requests')
@@ -49,13 +48,21 @@ export default function TenantRequestsPage() {
     }
   }
 
+  useEffect(() => {
+    const load = async () => {
+      await loadRequests()
+    }
+
+    load()
+  }, [])
+
   const handlePayment = async (rentalRequestId: string) => {
     try {
       setPayingId(rentalRequestId)
 
       const data = await createPayment(rentalRequestId)
 
-      window.location.href = data.checkoutUrl
+      window.location.assign(data.checkoutUrl)
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : 'Failed to create payment',

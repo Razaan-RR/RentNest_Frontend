@@ -23,13 +23,11 @@ export default function TenantReviewsPage() {
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    loadReviews()
-  }, [])
-
   const loadReviews = async () => {
     try {
-      const response = await getMyReviews()
+      const response = (await getMyReviews()) as {
+        reviews: Review[]
+      }
 
       setReviews(response.reviews || [])
     } catch (error) {
@@ -41,6 +39,14 @@ export default function TenantReviewsPage() {
     }
   }
 
+  useEffect(() => {
+    const load = async () => {
+      await loadReviews()
+    }
+
+    load()
+  }, [])
+
   if (loading) {
     return <div className="py-10 text-center">Loading reviews...</div>
   }
@@ -51,7 +57,7 @@ export default function TenantReviewsPage() {
         <h1 className="text-3xl font-bold">My Reviews</h1>
 
         <p className="mt-2 text-muted-foreground">
-          Reviews you've submitted for completed rentals.
+          Reviews youve submitted for completed rentals.
         </p>
       </div>
 

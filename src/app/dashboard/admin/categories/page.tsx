@@ -19,8 +19,14 @@ import {
   deleteCategory,
 } from '@/services/category.service'
 
+interface Category {
+  id: string
+  name: string
+  description?: string
+}
+
 export default function AdminCategoriesPage() {
-  const [categories, setCategories] = useState<any[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
 
   const [loading, setLoading] = useState(true)
 
@@ -31,7 +37,9 @@ export default function AdminCategoriesPage() {
 
   const loadCategories = async () => {
     try {
-      const response = await getCategories()
+      const response = (await getCategories()) as {
+        categories: Category[]
+      }
 
       setCategories(response.categories || [])
     } catch (error) {
@@ -42,7 +50,21 @@ export default function AdminCategoriesPage() {
   }
 
   useEffect(() => {
-    loadCategories()
+    const fetchCategories = async () => {
+      try {
+        const response = (await getCategories()) as {
+          categories: Category[]
+        }
+
+        setCategories(response.categories || [])
+      } catch {
+        toast.error('Failed to load categories')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCategories()
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {

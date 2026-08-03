@@ -8,13 +8,29 @@ import {
   updateRentalRequestStatus,
 } from '@/services/rentalRequest.service'
 
+interface RentalRequest {
+  id: string
+  moveInDate: string
+  duration: number
+  status: string
+  property: {
+    title: string
+  }
+  tenant: {
+    name: string
+    email: string
+  }
+}
+
 export default function LandlordRequestsPage() {
-  const [requests, setRequests] = useState<any[]>([])
+  const [requests, setRequests] = useState<RentalRequest[]>([])
   const [loading, setLoading] = useState(true)
 
   const fetchRequests = async () => {
     try {
-      const data = await getLandlordRequests()
+      const data = (await getLandlordRequests()) as {
+        rentalRequests: RentalRequest[]
+      }
 
       setRequests(data.rentalRequests || [])
     } catch (error) {
@@ -27,7 +43,11 @@ export default function LandlordRequestsPage() {
   }
 
   useEffect(() => {
-    fetchRequests()
+    const load = async () => {
+      await fetchRequests()
+    }
+
+    load()
   }, [])
 
   const updateStatus = async (

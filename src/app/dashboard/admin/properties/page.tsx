@@ -35,7 +35,9 @@ export default function AdminPropertiesPage() {
 
   const loadProperties = async () => {
     try {
-      const response = await getAdminProperties()
+      const response = (await getAdminProperties()) as {
+        properties: Property[]
+      }
 
       setProperties(response.properties || [])
     } catch (error) {
@@ -48,7 +50,11 @@ export default function AdminPropertiesPage() {
   }
 
   useEffect(() => {
-    loadProperties()
+    const fetchProperties = async () => {
+      await loadProperties()
+    }
+
+    fetchProperties()
   }, [])
 
   if (loading) {

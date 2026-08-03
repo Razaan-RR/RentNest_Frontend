@@ -36,7 +36,9 @@ export default function AdminRentalsPage() {
 
   const loadRentals = async () => {
     try {
-      const response = await getAdminRentals()
+      const response = (await getAdminRentals()) as {
+        rentals: Rental[]
+      }
 
       setRentals(response.rentals || [])
     } catch (error) {
@@ -49,7 +51,11 @@ export default function AdminRentalsPage() {
   }
 
   useEffect(() => {
-    loadRentals()
+    const fetchRentals = async () => {
+      await loadRentals()
+    }
+
+    fetchRentals()
   }, [])
 
   if (loading) {

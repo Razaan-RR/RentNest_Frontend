@@ -28,13 +28,11 @@ export default function AdminDashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    loadStats()
-  }, [])
-
   const loadStats = async () => {
     try {
-      const response = await getAdminStats()
+      const response = (await getAdminStats()) as {
+        stats: Stats
+      }
 
       setStats(response.stats)
     } catch (error) {
@@ -47,6 +45,14 @@ export default function AdminDashboardPage() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      await loadStats()
+    }
+
+    fetchStats()
+  }, [])
 
   if (loading) {
     return <div className="py-10 text-center">Loading dashboard...</div>

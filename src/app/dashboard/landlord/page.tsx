@@ -6,17 +6,33 @@ import { toast } from 'sonner'
 import { getMyProperties } from '@/services/property.service'
 import { getLandlordRequests } from '@/services/rentalRequest.service'
 
+interface Property {
+  id: string
+  title: string
+  rentAmount: string
+}
+
+interface RentalRequest {
+  id: string
+  status: string
+}
+
 export default function LandlordDashboardPage() {
-  const [properties, setProperties] = useState<any[]>([])
-  const [requests, setRequests] = useState<any[]>([])
+  const [properties, setProperties] = useState<Property[]>([])
+  const [requests, setRequests] = useState<RentalRequest[]>([])
 
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const propertyData = await getMyProperties()
-        const requestData = await getLandlordRequests()
+        const propertyData = (await getMyProperties()) as {
+          properties: Property[]
+        }
+
+        const requestData = (await getLandlordRequests()) as {
+          rentalRequests: RentalRequest[]
+        }
 
         setProperties(propertyData.properties || [])
 

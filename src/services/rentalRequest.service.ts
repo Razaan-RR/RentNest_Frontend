@@ -1,18 +1,65 @@
 import { apiRequest } from '@/lib/api'
 
-// Tenant: Get my rental requests
-export const getMyRentalRequests = async () => {
-  return apiRequest('/rentals', {
-    method: 'GET',
-  })
+interface RentalRequest {
+  id: string
+  status: string
+  duration: number
+  moveInDate: string
+
+  property: {
+    title: string
+    location: string
+    rentAmount: string
+
+    landlord: {
+      name: string
+      email: string
+    }
+  }
 }
 
-// Landlord: Get incoming rental requests
-export const getLandlordRequests = async () => {
-  return apiRequest('/rentals/landlord', {
-    method: 'GET',
-  })
+interface RentalRequest {
+  id: string
+  status: string
+  duration: number
+  moveInDate: string
+
+  property: {
+    title: string
+    location: string
+    rentAmount: string
+
+    landlord: {
+      name: string
+      email: string
+    }
+  }
+
+  tenant: {
+    name: string
+    email: string
+  }
 }
+
+interface RentalRequestsResponse {
+  rentalRequests: RentalRequest[]
+}
+
+// Tenant: Get my rental requests
+export const getMyRentalRequests =
+  async (): Promise<RentalRequestsResponse> => {
+    return apiRequest('/rentals', {
+      method: 'GET',
+    })
+  }
+
+// Landlord: Get incoming rental requests
+export const getLandlordRequests =
+  async (): Promise<RentalRequestsResponse> => {
+    return apiRequest('/rentals/landlord', {
+      method: 'GET',
+    })
+  }
 
 // Landlord: Update rental request status
 export const updateRentalRequestStatus = async (

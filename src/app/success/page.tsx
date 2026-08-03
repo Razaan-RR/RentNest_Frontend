@@ -17,18 +17,14 @@ export default function SuccessPage() {
   const [loading, setLoading] = useState(true)
   const [success, setSuccess] = useState(false)
 
-  useEffect(() => {
+  const confirm = async () => {
     if (!sessionId) {
       setLoading(false)
       return
     }
 
-    confirm()
-  }, [sessionId])
-
-  const confirm = async () => {
     try {
-      await confirmPayment(sessionId!)
+      await confirmPayment(sessionId)
 
       setSuccess(true)
 
@@ -41,6 +37,14 @@ export default function SuccessPage() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    const verifyPayment = async () => {
+      await confirm()
+    }
+
+    verifyPayment()
+  }, [sessionId])
 
   if (loading) {
     return (
@@ -57,9 +61,7 @@ export default function SuccessPage() {
           Payment Confirmation Failed
         </h1>
 
-        <p className="text-muted-foreground">
-          We couldn't verify your payment.
-        </p>
+        <p className="text-muted-foreground">We couldnt verify your payment.</p>
 
         <Button asChild>
           <Link href="/dashboard/tenant/payments">Back to Payments</Link>

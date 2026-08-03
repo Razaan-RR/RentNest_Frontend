@@ -10,7 +10,26 @@ export default async function PropertyDetailsPage({
 }) {
   const { id } = await params
 
-  const response = await getPropertyById(id)
+  const response = (await getPropertyById(id)) as {
+    property: {
+      id: string
+      title: string
+      location: string
+      rentAmount: string
+      description: string
+      bedrooms: number
+      bathrooms: number
+      area: number
+      propertyType: string
+      amenities: string
+      availability: string
+      images?: string[]
+      landlord: {
+        name: string
+        email: string
+      }
+    }
+  }
 
   const property = response.property
 

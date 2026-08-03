@@ -1,6 +1,12 @@
 import { apiRequest } from '@/lib/api'
 
-export const createPayment = async (rentalRequestId: string) => {
+interface CreatePaymentResponse {
+  checkoutUrl: string
+}
+
+export const createPayment = async (
+  rentalRequestId: string,
+): Promise<CreatePaymentResponse> => {
   return apiRequest('/payments/create', {
     method: 'POST',
     body: JSON.stringify({ rentalRequestId }),

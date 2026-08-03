@@ -6,6 +6,18 @@ import { toast } from 'sonner'
 import ImageUpload from '@/components/shared/ImageUpload'
 import { getProfile, updateProfile } from '@/services/profile.service'
 
+interface Profile {
+  phone?: string | null
+  avatar?: string | null
+  dateOfBirth?: string | null
+  address?: string | null
+  city?: string | null
+  state?: string | null
+  country?: string | null
+  postalCode?: string | null
+  bio?: string | null
+}
+
 export default function AdminProfilePage() {
   const [form, setForm] = useState({
     phone: '',
@@ -21,13 +33,9 @@ export default function AdminProfilePage() {
 
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    loadProfile()
-  }, [])
-
   const loadProfile = async () => {
     try {
-      const profile = await getProfile()
+      const profile = (await getProfile()) as Profile
 
       if (!profile) return
 
@@ -48,6 +56,14 @@ export default function AdminProfilePage() {
       console.error(error)
     }
   }
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      await loadProfile()
+    }
+
+    fetchProfile()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
