@@ -1,5 +1,20 @@
 import { apiRequest } from '@/lib/api'
 
+interface PropertyData {
+  title: string
+  location: string
+  address: string
+  description: string
+  rentAmount: number
+  bedrooms: number
+  bathrooms: number
+  area?: number
+  propertyType: string
+  amenities: string
+  categoryId?: string
+  images?: string[]
+}
+
 // Get all properties with optional filters
 export const getProperties = async (filters?: Record<string, string>) => {
   const query = filters ? new URLSearchParams(filters).toString() : ''
@@ -31,7 +46,7 @@ export const getMyProperties = async () => {
 }
 
 // Landlord: Create property
-export const createProperty = async (data: any) => {
+export const createProperty = async (data: PropertyData) => {
   return apiRequest('/properties', {
     method: 'POST',
     body: JSON.stringify(data),
@@ -39,7 +54,10 @@ export const createProperty = async (data: any) => {
 }
 
 // Landlord: Update property
-export const updateProperty = async (id: string, data: any) => {
+export const updateProperty = async (
+  id: string,
+  data: Partial<PropertyData>,
+) => {
   return apiRequest(`/properties/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),

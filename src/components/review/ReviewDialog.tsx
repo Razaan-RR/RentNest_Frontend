@@ -66,7 +66,7 @@ export default function ReviewDialog({ rentalRequestId, onSuccess }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <Button>Leave Review</Button>
       </DialogTrigger>
 

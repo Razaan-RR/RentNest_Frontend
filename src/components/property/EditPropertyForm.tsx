@@ -35,13 +35,23 @@ export default function EditPropertyForm({ id }: Props) {
     images: [] as string[],
   })
 
-  useEffect(() => {
-    loadProperty()
-  }, [])
-
   const loadProperty = async () => {
     try {
-      const response = await getPropertyById(id)
+      const response = (await getPropertyById(id)) as {
+        property: {
+          title: string
+          location: string
+          address: string
+          description: string
+          rentAmount: string | number
+          bedrooms: number
+          bathrooms: number
+          area?: number
+          propertyType: string
+          amenities?: string
+          images?: string[]
+        }
+      }
 
       const property = response.property
 
@@ -64,6 +74,14 @@ export default function EditPropertyForm({ id }: Props) {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    const fetchProperty = async () => {
+      await loadProperty()
+    }
+
+    fetchProperty()
+  }, [])
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

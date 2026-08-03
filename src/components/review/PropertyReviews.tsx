@@ -25,13 +25,12 @@ export default function PropertyReviews({ propertyId }: Props) {
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    loadReviews()
-  }, [propertyId])
-
   const loadReviews = async () => {
     try {
-      const response = await getPropertyReviews(propertyId)
+      const response = (await getPropertyReviews(propertyId)) as {
+        reviews: Review[]
+      }
+
       setReviews(response.reviews || [])
     } catch (error) {
       toast.error(
@@ -41,6 +40,14 @@ export default function PropertyReviews({ propertyId }: Props) {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      await loadReviews()
+    }
+
+    fetchReviews()
+  }, [propertyId])
 
   if (loading) {
     return (

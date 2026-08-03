@@ -14,8 +14,19 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 
+interface Property {
+  id: string
+  title: string
+  location: string
+  rentAmount: string
+  availability: string
+  category?: {
+    name: string
+  }
+}
+
 interface Props {
-  property: any
+  property: Property
   onDelete: (id: string) => void
 }
 
@@ -56,11 +67,9 @@ export default function PropertyCard({ property, onDelete }: Props) {
           </Button>
 
           <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <button className="text-red-500 hover:text-red-700">
-                Delete
-              </button>
-            </AlertDialogTrigger>
+            <Link href={`/dashboard/landlord/properties/${property.id}/edit`}>
+              <Button>Edit</Button>
+            </Link>
 
             <AlertDialogContent>
               <AlertDialogHeader>
@@ -76,7 +85,7 @@ export default function PropertyCard({ property, onDelete }: Props) {
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
 
                 <AlertDialogAction
-                  onClick={() => handleDelete(category.id)}
+                  onClick={() => onDelete(property.id)}
                   className="bg-red-600 hover:bg-red-700"
                 >
                   Delete

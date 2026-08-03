@@ -55,19 +55,25 @@ export default function PropertyForm() {
     images: [],
   })
 
-  useEffect(() => {
-    loadCategories()
-  }, [])
-
   const loadCategories = async () => {
     try {
-      const response = await getCategories()
+      const response = (await getCategories()) as {
+        categories: Category[]
+      }
 
       setCategories(response.categories)
     } catch {
       toast.error('Failed to load categories')
     }
   }
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      await loadCategories()
+    }
+
+    fetchCategories()
+  }, [])
 
   const handleChange = (
     e: React.ChangeEvent<

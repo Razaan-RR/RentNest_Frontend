@@ -6,6 +6,10 @@ import { getCategories } from '@/services/property.service'
 interface FilterProps {
   onFilter: (filters: Record<string, string>) => void
 }
+interface Category {
+  id: string
+  name: string
+}
 
 export default function PropertyFilter({ onFilter }: FilterProps) {
   const [location, setLocation] = useState('')
@@ -16,11 +20,13 @@ export default function PropertyFilter({ onFilter }: FilterProps) {
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
 
-  const [categories, setCategories] = useState<any[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
 
   useEffect(() => {
     const loadCategories = async () => {
-      const response = await getCategories()
+      const response = (await getCategories()) as {
+        categories: Category[]
+      }
 
       setCategories(response.categories)
     }
@@ -31,7 +37,7 @@ export default function PropertyFilter({ onFilter }: FilterProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    const filters: any = {}
+    const filters: Record<string, string> = {}
 
     if (location) filters.location = location
 

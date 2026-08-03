@@ -1,6 +1,13 @@
 import Cookies from 'js-cookie'
 
-export const saveAuthData = (token: string, user: any) => {
+interface User {
+  id: string
+  name: string
+  email: string
+  role: 'TENANT' | 'LANDLORD' | 'ADMIN'
+}
+
+export const saveAuthData = (token: string, user: User) => {
   Cookies.set('accessToken', token, {
     expires: 7,
   })

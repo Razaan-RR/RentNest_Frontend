@@ -21,18 +21,19 @@ export default function TenantDashboard() {
   const [requests, setRequests] = useState<RentalRequest[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    loadRequests()
-  }, [])
-
   const loadRequests = async () => {
     try {
-      const res = await getMyRentalRequests()
-      setRequests(res.rentalRequests)
+      const res = (await getMyRentalRequests()) as {
+        rentalRequests: RentalRequest[]
+      }
     } finally {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    loadRequests()
+  }, [])
 
   if (loading) {
     return <p>Loading requests...</p>

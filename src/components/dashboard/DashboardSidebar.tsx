@@ -12,7 +12,7 @@ export default function DashboardSidebar() {
 
   if (!user) return null
 
-  const menus = dashboardMenu[user.role]
+  const menus = dashboardMenu[user.role as keyof typeof dashboardMenu]
 
   return (
     <aside className="w-64 min-h-screen border-r bg-background p-6">
@@ -23,7 +23,7 @@ export default function DashboardSidebar() {
       </Link>
 
       <nav className="space-y-2">
-        {menus.map((item) => {
+        {menus.map((item: { title: string; href: string; icon?: React.ElementType }) => {
           const active = pathname === item.href
 
           return (
