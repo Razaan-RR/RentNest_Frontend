@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 import {
@@ -35,36 +35,48 @@ export default function AdminCategoriesPage() {
     description: '',
   })
 
-  const loadCategories = async () => {
+  const loadCategories = useCallback(async () => {
     try {
       const response = (await getCategories()) as {
         categories: Category[]
       }
 
       setCategories(response.categories || [])
-    } catch (error) {
+    } catch {
       toast.error('Failed to load categories')
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
   useEffect(() => {
+    let cancelled = false
+
     const fetchCategories = async () => {
       try {
         const response = (await getCategories()) as {
           categories: Category[]
         }
 
-        setCategories(response.categories || [])
+        if (!cancelled) {
+          setCategories(response.categories || [])
+        }
       } catch {
-        toast.error('Failed to load categories')
+        if (!cancelled) {
+          toast.error('Failed to load categories')
+        }
       } finally {
-        setLoading(false)
+        if (!cancelled) {
+          setLoading(false)
+        }
       }
     }
 
     fetchCategories()
+
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
