@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { getUser, removeAuthData } from '@/lib/storage'
@@ -8,9 +8,18 @@ import { getUser, removeAuthData } from '@/lib/storage'
 const AuthContext = createContext<any>(null)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState(() => getUser())
+  const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
 
   const router = useRouter()
+
+  useEffect(() => {
+    const storedUser = getUser()
+
+    setUser(storedUser)
+
+    setLoading(false)
+  }, [])
 
   const logout = () => {
     removeAuthData()
@@ -24,6 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         setUser,
         logout,
+        loading,
       }}
     >
       {children}

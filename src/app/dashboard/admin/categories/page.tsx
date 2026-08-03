@@ -170,10 +170,8 @@ export default function AdminCategoriesPage() {
             </div>
 
             <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <button className="text-red-500 hover:text-red-700">
-                  Delete
-                </button>
+              <AlertDialogTrigger className="text-red-500 hover:text-red-700">
+                Delete
               </AlertDialogTrigger>
 
               <AlertDialogContent>

@@ -15,9 +15,9 @@ export default function CancelPage() {
         Your payment was cancelled. No money has been charged.
       </p>
 
-      <Button asChild>
-        <Link href="/dashboard/tenant/requests">Back to My Requests</Link>
-      </Button>
+      <Link href="/dashboard/tenant/requests">
+        <Button>Back to My Requests</Button>
+      </Link>
     </div>
   )
 }
